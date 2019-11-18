@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:replace="common/adminCommon :: adminScript"></script>
+</head>
+<body>
+    <table id="articleList" lay-filter="articleList"></table>
+
+    <script th:inline="javascript">
+        var tableRender,layer;
+        layui.use(['table','layer'], function (table1) {
+            layer = layui.layer;
+            table1 = table1 || layui.table;
+            var table = table1;
+            //第一个实例
+            tableRender = table.render({
+                elem: '#articleList'
+                ,height: 'full-20'
+                ,url: '/admin/article/list' //数据接口
+                ,method: 'POST'
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                    {type:'checkbox'}
+                    ,{field: 'articleId', title: 'ID',  sort: true, fixed: 'left',hide: true}
+                    ,{field: 'articleTitle', title: '文章标题', }
+                    ,{field: 'articleDescribe', title: '简要描述', }
+                    ,{field: 'articleType', title: '分类', }
+                    ,{field: 'createTime', title: '创建时间', sort: true}
+                    ,{fixed: 'right', title:'操作', toolbar: '#lineBar', width:150}
+                ]]
+                ,toolbar: '#toolbar'
+            });
+            //复选框选中事件
+            table.on('checkbox(articleList)', function(obj){
+                //当前是否选中状态obj.checked
+                //选中行的相关数据obj.data
+                 //如果触发的是全选，则为：all，如果触发的是单选，则为：oneobj.type
+            });
+
+            //监听行工具事件
+            table.on('tool(articleList)', function(obj){
+                var data = obj.data;
+                //console.log(obj)
+                if(obj.event === 'del'){
+                    layer.confirm('确认删除吗', function(index){
+                        del(data.articleId);
+                        tableRender.reload();
+                    });
+                } else if(obj.event === 'edit'){
+                    // layer.open({
+                    //     type: 2
+                    //     ,content: '/admin/article/edit?articleId='+data.articleId+"&"+new Date()
+                    //     ,area: ['95%', '85%']
+                    //     ,btn: '取消'
+                    //     ,btnAlign: 'c' //按钮居中
+                    //     ,end: function(){
+                    //         tableRender.reload();
+                    //     }
+                    // });
+
+                    window.location.href='/admin/article/edit?articleId='+data.articleId+"&"+new Date();
+
+                }
+            });
+
+
+            //监听头部工具栏事件
+            table.on('toolbar(articleList)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch(obj.event){
+                    case 'add':
+                        layer.msg('添加');
+                        break;
+                    case 'delete':
+                        //获取表格选中行
+                        var checkedRows = table.checkStatus('articleList');
+                        var checkedData = checkedRows.data;
+                        if(checkedData.length<=0){
+                            layer.msg("请选择要删除的数据");
+                            break;
+                        }
+                        //获取选中行的ids
+                        var checkDataArray=new Array();
+                        checkedData.forEach((item,index,array)=>{
+                            checkDataArray.push(item.articleId);
+                        });
+                        var ids = checkDataArray.join(",");
+                        del(ids);
+                        break;
+                };
+            });
+        });
+
+
+        //删除数据方法
+        function del(ids){
+            $.ajax({
+                url:"/admin/article/del"
+                ,type:"DELETE"
+                ,dataType:"json"
+                ,data:{ids:ids}
+                ,success:function(data){
+                    if(data.code=="1"){
+                        layer.msg("删除成功");
+                        tableRender.reload();
+                    }else{
+                        layer.msg("删除失败");
+                    }
+                }
+            })
+        }
+    </script>
+
+    <script type="text/html" id="toolbar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="delete" >批量删除</button>
+        </div>
+    </script>
+    <script type="text/html" id="lineBar">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</body>
+</html>

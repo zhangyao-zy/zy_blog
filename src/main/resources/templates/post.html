@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <div th:replace="common/_script :: commonScript"></div>
+
+</head>
+
+<body>
+
+<div th:replace="common/_script :: commonHeader"></div>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('/plugin/img/post-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>[[${article.articleTitle}]]</h1>
+            <h2 class="subheading">[[${article.articleDescribe}]]</h2>
+            <span class="meta">发布日期[[${article.createTime}]]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto" th:utext="${article.articleContent}">
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+<div th:replace="common/_script :: commonFooter"></div>
+</body>
+
+</html>

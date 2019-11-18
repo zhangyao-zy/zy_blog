@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.blog.mapper.base.ArticleBaseMapper">
+
+
+    <insert id="insertArticle"  useGeneratedKeys="true" keyProperty="articleId">
+        INSERT INTO `article`
+        (
+        <trim suffixOverrides=",">
+                    <if test="articleId!=null">
+                        `article_id`,
+                    </if>
+                    <if test="articleTitle!=null">
+                        `article_title`,
+                    </if>
+                    <if test="articleDescribe!=null">
+                        `article_describe`,
+                    </if>
+                    <if test="articleContent!=null">
+                        `article_content`,
+                    </if>
+                    <if test="articleType!=null">
+                        `article_type`,
+                    </if>
+                    <if test="createTime!=null">
+                        `create_time`,
+                    </if>
+                    <if test="updateTime!=null">
+                        `update_time`,
+                    </if>
+                    <if test="createUser!=null">
+                        `create_user`,
+                    </if>
+                    <if test="updateUser!=null">
+                        `update_user`,
+                    </if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+                <if test="articleId!=null">
+                    #{articleId},
+                </if>
+                <if test="articleTitle!=null">
+                    #{articleTitle},
+                </if>
+                <if test="articleDescribe!=null">
+                    #{articleDescribe},
+                </if>
+                <if test="articleContent!=null">
+                    #{articleContent},
+                </if>
+                <if test="articleType!=null">
+                    #{articleType},
+                </if>
+                <if test="createTime!=null">
+                    #{createTime},
+                </if>
+                <if test="updateTime!=null">
+                    #{updateTime},
+                </if>
+                <if test="createUser!=null">
+                    #{createUser},
+                </if>
+                <if test="updateUser!=null">
+                    #{updateUser},
+                </if>
+        </trim>
+        )
+    </insert>
+
+
+
+
+    <update id="updateArticle">
+        UPDATE `article`
+        SET
+        <trim suffixOverrides=",">
+            <if test="articleTitle != null and articleTitle!=''">
+                `article_title` = #{articleTitle},
+            </if>
+            <if test="articleDescribe != null and articleDescribe!=''">
+                `article_describe` = #{articleDescribe},
+            </if>
+            <if test="articleContent != null and articleContent!=''">
+                `article_content` = #{articleContent},
+            </if>
+            <if test="articleType != null and articleType!=''">
+                `article_type` = #{articleType},
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime},
+            </if>
+            <if test="createUser != null and createUser!=''">
+                `create_user` = #{createUser},
+            </if>
+            <if test="updateUser != null and updateUser!=''">
+                `update_user` = #{updateUser},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+                `article_id` = #{articleId} and
+        </trim>
+    </update>
+
+    <update id="update">
+        UPDATE `article`
+        SET
+        <trim suffixOverrides=",">
+        <if test="set.articleTitle != null and set.articleTitle!=''">
+            `article_title` = #{set.articleTitle},
+        </if>
+        <if test="set.articleDescribe != null and set.articleDescribe!=''">
+            `article_describe` = #{set.articleDescribe},
+        </if>
+        <if test="set.articleContent != null and set.articleContent!=''">
+            `article_content` = #{set.articleContent},
+        </if>
+        <if test="set.articleType != null and set.articleType!=''">
+            `article_type` = #{set.articleType},
+        </if>
+        <if test="set.createTime != null">
+            `create_time` = #{set.createTime},
+        </if>
+        <if test="set.updateTime != null">
+            `update_time` = #{set.updateTime},
+        </if>
+        <if test="set.createUser != null and set.createUser!=''">
+            `create_user` = #{set.createUser},
+        </if>
+        <if test="set.updateUser != null and set.updateUser!=''">
+            `update_user` = #{set.updateUser},
+        </if>
+        </trim>
+        <trim prefix="where" suffixOverrides="and | or">
+                <if test="where.articleIdList != null">
+                    `article_id` in
+                    <foreach collection="where.articleIdList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.articleIdSt !=null">
+                `article_id` >= #{where.articleIdSt} and
+            </if>
+            <if test="where.articleIdEd!=null">
+                `article_id` &lt;= #{where.articleIdEd} and
+            </if>
+                <if test="where.articleTitleList != null">
+                    `article_title` in
+                    <foreach collection="where.articleTitleList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyArticleTitle!=null and where.fuzzyArticleTitle.size()>0">
+                (
+                <foreach collection="where.fuzzyArticleTitle"  separator="or" item="item">
+                    `Article_title` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyArticleTitle!=null and where.rightFuzzyArticleTitle.size()>0">
+                (
+                <foreach collection="where.rightFuzzyArticleTitle"  separator="or" item="item">
+                    `Article_title` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+                <if test="where.articleDescribeList != null">
+                    `article_describe` in
+                    <foreach collection="where.articleDescribeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyArticleDescribe!=null and where.fuzzyArticleDescribe.size()>0">
+                (
+                <foreach collection="where.fuzzyArticleDescribe"  separator="or" item="item">
+                    `Article_describe` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyArticleDescribe!=null and where.rightFuzzyArticleDescribe.size()>0">
+                (
+                <foreach collection="where.rightFuzzyArticleDescribe"  separator="or" item="item">
+                    `Article_describe` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+                <if test="where.articleContentList != null">
+                    `article_content` in
+                    <foreach collection="where.articleContentList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyArticleContent!=null and where.fuzzyArticleContent.size()>0">
+                (
+                <foreach collection="where.fuzzyArticleContent"  separator="or" item="item">
+                    `Article_content` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyArticleContent!=null and where.rightFuzzyArticleContent.size()>0">
+                (
+                <foreach collection="where.rightFuzzyArticleContent"  separator="or" item="item">
+                    `Article_content` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+                <if test="where.articleTypeList != null">
+                    `article_type` in
+                    <foreach collection="where.articleTypeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyArticleType!=null and where.fuzzyArticleType.size()>0">
+                (
+                <foreach collection="where.fuzzyArticleType"  separator="or" item="item">
+                    `Article_type` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyArticleType!=null and where.rightFuzzyArticleType.size()>0">
+                (
+                <foreach collection="where.rightFuzzyArticleType"  separator="or" item="item">
+                    `Article_type` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+                <if test="where.createTimeList != null">
+                    `create_time` in
+                    <foreach collection="where.createTimeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.createTimeSt !=null">
+                `create_time` >= #{where.createTimeSt} and
+            </if>
+            <if test="where.createTimeEd!=null">
+                `create_time` &lt;= #{where.createTimeEd} and
+            </if>
+                <if test="where.updateTimeList != null">
+                    `update_time` in
+                    <foreach collection="where.updateTimeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.updateTimeSt !=null">
+                `update_time` >= #{where.updateTimeSt} and
+            </if>
+            <if test="where.updateTimeEd!=null">
+                `update_time` &lt;= #{where.updateTimeEd} and
+            </if>
+                <if test="where.createUserList != null">
+                    `create_user` in
+                    <foreach collection="where.createUserList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyCreateUser!=null and where.fuzzyCreateUser.size()>0">
+                (
+                <foreach collection="where.fuzzyCreateUser"  separator="or" item="item">
+                    `Create_user` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyCreateUser!=null and where.rightFuzzyCreateUser.size()>0">
+                (
+                <foreach collection="where.rightFuzzyCreateUser"  separator="or" item="item">
+                    `Create_user` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+                <if test="where.updateUserList != null">
+                    `update_user` in
+                    <foreach collection="where.updateUserList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyUpdateUser!=null and where.fuzzyUpdateUser.size()>0">
+                (
+                <foreach collection="where.fuzzyUpdateUser"  separator="or" item="item">
+                    `Update_user` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyUpdateUser!=null and where.rightFuzzyUpdateUser.size()>0">
+                (
+                <foreach collection="where.rightFuzzyUpdateUser"  separator="or" item="item">
+                    `Update_user` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+        </trim>
+    </update>
+
+
+    <resultMap type="com.zy.blog.entity.Article" id="ArticleMap">
+        <result property="articleId" column="article_id"/>
+        <result property="articleTitle" column="article_title"/>
+        <result property="articleDescribe" column="article_describe"/>
+        <result property="articleContent" column="article_content"/>
+        <result property="articleType" column="article_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="update_user"/>
+    </resultMap>
+
+
+    <select id="queryArticle" resultMap="ArticleMap">
+        select
+        <include refid="baseResult"></include>
+        from  `article`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="articleId != null">
+                `article_id` = #{articleId} and
+            </if>
+            <if test="articleTitle != null and articleTitle!=''">
+                `article_title` = #{articleTitle} and
+            </if>
+            <if test="articleDescribe != null and articleDescribe!=''">
+                `article_describe` = #{articleDescribe} and
+            </if>
+            <if test="articleContent != null and articleContent!=''">
+                `article_content` = #{articleContent} and
+            </if>
+            <if test="articleType != null and articleType!=''">
+                `article_type` = #{articleType} and
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime} and
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime} and
+            </if>
+            <if test="createUser != null and createUser!=''">
+                `create_user` = #{createUser} and
+            </if>
+            <if test="updateUser != null and updateUser!=''">
+                `update_user` = #{updateUser} and
+            </if>
+            <if test = "(_parameter instanceof com.zy.blog.entity.Article$QueryBuilder) == true">
+                <if test="articleIdList != null">
+                    `article_id` in
+                    <foreach collection="articleIdList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="articleIdSt !=null">
+                    `article_id` >= #{articleIdSt} and
+                </if>
+                <if test="articleIdEd!=null">
+                    `article_id` &lt;= #{articleIdEd} and
+                </if>
+                <if test="articleTitleList != null">
+                    `article_title` in
+                    <foreach collection="articleTitleList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyArticleTitle!=null and fuzzyArticleTitle.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleTitle"  separator="or" item="item">
+                        `Article_title` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleTitle!=null and rightFuzzyArticleTitle.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleTitle"  separator="or" item="item">
+                        `Article_title` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="articleDescribeList != null">
+                    `article_describe` in
+                    <foreach collection="articleDescribeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyArticleDescribe!=null and fuzzyArticleDescribe.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleDescribe"  separator="or" item="item">
+                        `Article_describe` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleDescribe!=null and rightFuzzyArticleDescribe.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleDescribe"  separator="or" item="item">
+                        `Article_describe` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="articleContentList != null">
+                    `article_content` in
+                    <foreach collection="articleContentList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyArticleContent!=null and fuzzyArticleContent.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleContent"  separator="or" item="item">
+                        `Article_content` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleContent!=null and rightFuzzyArticleContent.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleContent"  separator="or" item="item">
+                        `Article_content` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="articleTypeList != null">
+                    `article_type` in
+                    <foreach collection="articleTypeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyArticleType!=null and fuzzyArticleType.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleType"  separator="or" item="item">
+                        `Article_type` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleType!=null and rightFuzzyArticleType.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleType"  separator="or" item="item">
+                        `Article_type` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="createTimeList != null">
+                    `create_time` in
+                    <foreach collection="createTimeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="createTimeSt !=null">
+                    `create_time` >= #{createTimeSt} and
+                </if>
+                <if test="createTimeEd!=null">
+                    `create_time` &lt;= #{createTimeEd} and
+                </if>
+                <if test="updateTimeList != null">
+                    `update_time` in
+                    <foreach collection="updateTimeList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="updateTimeSt !=null">
+                    `update_time` >= #{updateTimeSt} and
+                </if>
+                <if test="updateTimeEd!=null">
+                    `update_time` &lt;= #{updateTimeEd} and
+                </if>
+                <if test="createUserList != null">
+                    `create_user` in
+                    <foreach collection="createUserList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyCreateUser!=null and fuzzyCreateUser.size()>0">
+                    (
+                    <foreach collection="fuzzyCreateUser"  separator="or" item="item">
+                        `Create_user` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyCreateUser!=null and rightFuzzyCreateUser.size()>0">
+                    (
+                    <foreach collection="rightFuzzyCreateUser"  separator="or" item="item">
+                        `Create_user` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="updateUserList != null">
+                    `update_user` in
+                    <foreach collection="updateUserList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyUpdateUser!=null and fuzzyUpdateUser.size()>0">
+                    (
+                    <foreach collection="fuzzyUpdateUser"  separator="or" item="item">
+                        `Update_user` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyUpdateUser!=null and rightFuzzyUpdateUser.size()>0">
+                    (
+                    <foreach collection="rightFuzzyUpdateUser"  separator="or" item="item">
+                        `Update_user` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryArticleLimit1" resultMap="ArticleMap">
+        select
+        <include refid="baseResult"></include>
+        from  `article`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="articleId != null">
+                `article_id` = #{articleId} and
+            </if>
+            <if test="articleTitle != null and articleTitle!=''">
+                `article_title` = #{articleTitle} and
+            </if>
+            <if test="articleDescribe != null and articleDescribe!=''">
+                `article_describe` = #{articleDescribe} and
+            </if>
+            <if test="articleContent != null and articleContent!=''">
+                `article_content` = #{articleContent} and
+            </if>
+            <if test="articleType != null and articleType!=''">
+                `article_type` = #{articleType} and
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime} and
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime} and
+            </if>
+            <if test="createUser != null and createUser!=''">
+                `create_user` = #{createUser} and
+            </if>
+            <if test="updateUser != null and updateUser!=''">
+                `update_user` = #{updateUser} and
+            </if>
+            <if test = "(_parameter instanceof com.zy.blog.entity.Article$QueryBuilder) == true">
+                    <if test="articleIdList != null">
+                        `article_id` in
+                        <foreach collection="articleIdList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="articleIdSt !=null">
+                    `article_id` >= #{articleIdSt} and
+                </if>
+                <if test="articleIdEd!=null">
+                    `article_id` &lt;= #{articleIdEd} and
+                </if>
+                    <if test="articleTitleList != null">
+                        `article_title` in
+                        <foreach collection="articleTitleList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyArticleTitle!=null and fuzzyArticleTitle.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleTitle"  separator="or" item="item">
+                        `Article_title` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleTitle!=null and rightFuzzyArticleTitle.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleTitle"  separator="or" item="item">
+                        `Article_title` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="articleDescribeList != null">
+                        `article_describe` in
+                        <foreach collection="articleDescribeList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyArticleDescribe!=null and fuzzyArticleDescribe.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleDescribe"  separator="or" item="item">
+                        `Article_describe` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleDescribe!=null and rightFuzzyArticleDescribe.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleDescribe"  separator="or" item="item">
+                        `Article_describe` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="articleContentList != null">
+                        `article_content` in
+                        <foreach collection="articleContentList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyArticleContent!=null and fuzzyArticleContent.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleContent"  separator="or" item="item">
+                        `Article_content` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleContent!=null and rightFuzzyArticleContent.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleContent"  separator="or" item="item">
+                        `Article_content` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="articleTypeList != null">
+                        `article_type` in
+                        <foreach collection="articleTypeList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyArticleType!=null and fuzzyArticleType.size()>0">
+                    (
+                    <foreach collection="fuzzyArticleType"  separator="or" item="item">
+                        `Article_type` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyArticleType!=null and rightFuzzyArticleType.size()>0">
+                    (
+                    <foreach collection="rightFuzzyArticleType"  separator="or" item="item">
+                        `Article_type` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="createTimeList != null">
+                        `create_time` in
+                        <foreach collection="createTimeList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="createTimeSt !=null">
+                    `create_time` >= #{createTimeSt} and
+                </if>
+                <if test="createTimeEd!=null">
+                    `create_time` &lt;= #{createTimeEd} and
+                </if>
+                    <if test="updateTimeList != null">
+                        `update_time` in
+                        <foreach collection="updateTimeList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="updateTimeSt !=null">
+                    `update_time` >= #{updateTimeSt} and
+                </if>
+                <if test="updateTimeEd!=null">
+                    `update_time` &lt;= #{updateTimeEd} and
+                </if>
+                    <if test="createUserList != null">
+                        `create_user` in
+                        <foreach collection="createUserList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyCreateUser!=null and fuzzyCreateUser.size()>0">
+                    (
+                    <foreach collection="fuzzyCreateUser"  separator="or" item="item">
+                        `Create_user` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyCreateUser!=null and rightFuzzyCreateUser.size()>0">
+                    (
+                    <foreach collection="rightFuzzyCreateUser"  separator="or" item="item">
+                        `Create_user` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="updateUserList != null">
+                        `update_user` in
+                        <foreach collection="updateUserList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyUpdateUser!=null and fuzzyUpdateUser.size()>0">
+                    (
+                    <foreach collection="fuzzyUpdateUser"  separator="or" item="item">
+                        `Update_user` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyUpdateUser!=null and rightFuzzyUpdateUser.size()>0">
+                    (
+                    <foreach collection="rightFuzzyUpdateUser"  separator="or" item="item">
+                        `Update_user` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+            </if>
+        </trim>
+        limit 1
+    </select>
+
+    <sql id="allResult">
+        <trim suffixOverrides=",">
+        `article_id`,
+        `article_title`,
+        `article_describe`,
+        `article_content`,
+        `article_type`,
+        `create_time`,
+        `update_time`,
+        `create_user`,
+        `update_user`,
+        </trim>
+    </sql>
+
+
+
+    <sql id="baseResult">
+        <trim suffixOverrides=",">
+            <if test = "(_parameter instanceof com.zy.blog.entity.Article$QueryBuilder) == true">
+
+                <if test="fetchFields==null">
+                    <include refid="allResult"></include>
+                </if>
+                <if test="fetchFields!=null">
+                    <if test="fetchFields.AllFields !=null">
+                        <include refid="allResult"></include>
+                    </if>
+                    <if test="fetchFields.AllFields ==null and fetchFields.fetchFields==null and fetchFields.excludeFields==null and fetchFields.otherFields==null">
+                        <include refid="allResult"></include>
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.fetchFields!=null">
+                    <if test="fetchFields.fetchFields.articleId==true">
+                        `article_id`,
+                    </if>
+                    <if test="fetchFields.fetchFields.articleTitle==true">
+                        `article_title`,
+                    </if>
+                    <if test="fetchFields.fetchFields.articleDescribe==true">
+                        `article_describe`,
+                    </if>
+                    <if test="fetchFields.fetchFields.articleContent==true">
+                        `article_content`,
+                    </if>
+                    <if test="fetchFields.fetchFields.articleType==true">
+                        `article_type`,
+                    </if>
+                    <if test="fetchFields.fetchFields.createTime==true">
+                        `create_time`,
+                    </if>
+                    <if test="fetchFields.fetchFields.updateTime==true">
+                        `update_time`,
+                    </if>
+                    <if test="fetchFields.fetchFields.createUser==true">
+                        `create_user`,
+                    </if>
+                    <if test="fetchFields.fetchFields.updateUser==true">
+                        `update_user`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.excludeFields!=null">
+                    <if test="fetchFields.excludeFields.articleId==null">
+                        `article_id`,
+                    </if>
+                    <if test="fetchFields.excludeFields.articleTitle==null">
+                        `article_title`,
+                    </if>
+                    <if test="fetchFields.excludeFields.articleDescribe==null">
+                        `article_describe`,
+                    </if>
+                    <if test="fetchFields.excludeFields.articleContent==null">
+                        `article_content`,
+                    </if>
+                    <if test="fetchFields.excludeFields.articleType==null">
+                        `article_type`,
+                    </if>
+                    <if test="fetchFields.excludeFields.createTime==null">
+                        `create_time`,
+                    </if>
+                    <if test="fetchFields.excludeFields.updateTime==null">
+                        `update_time`,
+                    </if>
+                    <if test="fetchFields.excludeFields.createUser==null">
+                        `create_user`,
+                    </if>
+                    <if test="fetchFields.excludeFields.updateUser==null">
+                        `update_user`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.otherFields!=null and fetchFields.otherFields.size>0">
+                        <foreach collection="fetchFields.otherFields" index="index" item="item" separator=",">
+                        `#{item}`
+                        </foreach>
+                    </if>
+                </if>
+            </if>
+            <if test="(_parameter instanceof com.zy.blog.entity.Article$QueryBuilder) == false" >
+                <include refid="allResult"></include>
+            </if>
+
+        </trim>
+    </sql>
+
+
+</mapper>

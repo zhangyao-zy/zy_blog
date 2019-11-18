@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="adminScript">
+    <title>我的博客</title>
+    <script th:src="@{/plugin/vendor/jquery/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <!-- 引入wangEditor富文本编辑器js -->
+    <script src="https://unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+</head>
+<body>
+
+    <div class="layui-header" th:fragment="adminHeader">
+        <div class="layui-logo">我的博客后台管理</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    [[${session.user.username}]]
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="/admin/loginOut">退出登录</a></li>
+        </ul>
+    </div>
+
+
+    <div class="layui-side layui-bg-black" th:fragment="adminLeft">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">文章管理</a>
+                    <dl class="layui-nav-child">
+                        <dd class="layui-this"><a href="javascript:;" onclick="changeIfaSrc('list')" id="articleListButton" >文章列表</a></dd>
+                        <dd><a href="javascript:;" onclick="changeIfaSrc('add')">写文章</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-footer" style="text-align: center" th:fragment="adminFooter">
+        <!-- 底部固定区域 -->
+        © shangyirui.com
+    </div>
+</body>
+</html>

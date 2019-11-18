@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>错误</title>
+</head>
+<body>
+<h1> 错误代码: [[${status}]]</h1>
+<h1> 错误路径:  [[${path}]]</h1>
+<h1> 错误时间戳:  [[${#calendars.format(timestamp,'yyyy.MM.dd HH:mm:ss.SSS')}]]</h1>
+<h1> 错误信息:  [[${message}]]</h1>
+<h1> 异常信息:  [[${error}]]</h1>
+</body>
+</html>

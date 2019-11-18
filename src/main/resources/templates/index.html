@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+</head>
+
+<div th:replace="common/_script :: commonScript"></div>
+
+<body>
+
+  <div th:replace="common/_script :: commonHeader"></div>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('/plugin/img/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>健康快乐每一天</h1>
+            <span class="subheading"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+      <div th:each="article : ${articles}">
+        <div class="post-preview" >
+          <a th:href="@{/detail(articleId=${article.articleId})}">
+            <h2 class="post-title">
+              [[${article.articleTitle}]]
+            </h2>
+            <h3 class="post-subtitle">
+              [[${article.articleDescribe}]]
+            </h3>
+          </a>
+          <p class="post-meta">发布日期: [[${article.createTime}]]</p>
+        </div>
+        <hr th:if="${#arrays.length(articles)>1}">
+      </div>
+        <!-- Pager -->
+        <div class="clearfix">
+          <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+
+  <div th:replace="common/_script :: commonFooter"></div>
+</body>
+
+</html>
