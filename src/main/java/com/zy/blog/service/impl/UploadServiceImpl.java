@@ -60,7 +60,7 @@ public class UploadServiceImpl implements UploadService {
             map.put("errno",1);
             map.put("errMsg",e.toString());
         } finally {
-            //关闭连接
+            //关闭连接1
             ossClient.shutdown();
         }
         return map;
